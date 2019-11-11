@@ -99,18 +99,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Header />
-        <header className="App__header">
-          {!this.state.isCartOpen &&
-            <div className="App__view-cart-wrapper">
-              <button className="App__view-cart" onClick={() => this.setState({ isCartOpen: true })}>Cart</button>
-            </div>
-          }
-          <div className="App__title">
-            <h1>{this.state.shop.name}: React Example</h1>
-            <h2>{this.state.shop.description}</h2>
-          </div>
-        </header>
+        <Header client={this.props.client} />
         <Products
           products={this.state.products}
           client={this.props.client}

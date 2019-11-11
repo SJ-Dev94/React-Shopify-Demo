@@ -17,8 +17,10 @@ const client = Client.buildClient({
 });
 
 
+
 ReactDOM.render(
   <App client={client} />,
   document.querySelector('#root')
 )
 
+export default client;

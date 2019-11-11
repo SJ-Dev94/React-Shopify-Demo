@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import client from '../../index.js'
 import Cart from '../Cart/Cart.js'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import { Navbar, Nav, Dropdown, NavDropdown, Form, FormControl, Button, Image } from 'react-bootstrap'
 
 
@@ -23,9 +26,23 @@ class Header extends React.Component {
   }
 
   componentWillMount() {
+    this.props.client.checkout.create().then((res) => {
+      this.setState({
+        checkout: res,
+      });
+    });
 
+    this.props.client.product.fetchAll().then((res) => {
+      this.setState({
+        products: res,
+      });
+    });
 
-
+    this.props.client.shop.fetchInfo().then((res) => {
+      this.setState({
+        shop: res,
+      });
+    });
   }
 
   addVariantToCart(variantId, quantity) {
@@ -75,21 +92,23 @@ class Header extends React.Component {
 
     return <div className='message-box'>
       <Navbar bg="light" variant="light">
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+        <Navbar.Brand href="#home">Uniqlone</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="#home">Home</Nav.Link>
-          <Nav.Link href="#features">Features</Nav.Link>
-          <Nav.Link href="#pricing">Pricing</Nav.Link>
+          <Nav.Link href="#home">Women</Nav.Link>
+          <Nav.Link href="#features">Men</Nav.Link>
+          <Nav.Link href="#pricing">Kids</Nav.Link>
         </Nav>
         <Form inline>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-          <Cart
-            checkout={this.state.checkout}
-            isCartOpen={this.state.isCartOpen}
-            handleCartClose={this.handleCartClose}
-            updateQuantityInCart={this.updateQuantityInCart}
-            removeLineItemInCart={this.removeLineItemInCart}
-          />
+          <NavDropdown title="Cart" id="basic-nav-dropdown">
+            <Cart
+              checkout={this.state.checkout}
+              isCartOpen={this.state.isCartOpen}
+              handleCartClose={this.handleCartClose}
+              updateQuantityInCart={this.updateQuantityInCart}
+              removeLineItemInCart={this.removeLineItemInCart}
+            />
+          </NavDropdown>
           <Button variant="outline-primary">Search</Button>
         </Form>
       </Navbar>

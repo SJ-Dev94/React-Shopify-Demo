@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import ClientContext from '../../ClientContext'
 import LineItem from '../LineItem';
+import client from '../../index.js'
 
 class Cart extends Component {
   constructor(props) {
