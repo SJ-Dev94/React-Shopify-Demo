@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import VariantSelector from '../VariantSelector';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
+import Card from 'react-bootstrap/Card'
 
 class Product extends Component {
   constructor(props) {
@@ -61,19 +62,22 @@ class Product extends Component {
       );
     });
     return (
-      <Col>
+
+      <Card>
         <div className="Product">
-          {this.props.product.images.length ? <img src={variantImage.src} alt={`${this.props.product.title} product shot`} /> : null}
-          <h5 className="Product__title">{this.props.product.title}</h5>
-          <span className="Product__price">${variant.price}</span>
-          {variantSelectors}
-          <label className="Product__option">
-            Quantity
-          <input min="1" type="number" defaultValue={variantQuantity} onChange={this.handleQuantityChange}></input>
-          </label>
-          <button className="Product__buy button" onClick={() => this.props.addVariantToCart(variant.id, variantQuantity)}>Add to Cart</button>
+          {this.props.product.images.length ? <Card.Img variant="top" src={variantImage.src} alt={this.props.product.title} /> : null}
+          <Card.Body>
+            <h5 className="Product__title">{this.props.product.title}</h5>
+            <span className="Product__price">${variant.price}</span>
+            {variantSelectors}
+            <label className="Product__option">
+              Quantity
+              <input min="1" type="number" defaultValue={variantQuantity} onChange={this.handleQuantityChange}></input>
+            </label>
+            <button className="Product__buy button" onClick={() => this.props.addVariantToCart(variant.id, variantQuantity)}>Add to Cart</button>
+          </Card.Body>
         </div>
-      </Col>
+      </Card>
 
     );
   }

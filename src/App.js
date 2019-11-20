@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 //import { updateWindowSize } from './Redux/actions/windowSizeAction.js'
+import Container from 'react-bootstrap/container'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import LandingIndex from './Components/Landing/LandingIndex.js'
@@ -14,6 +15,16 @@ import gql from 'graphql-tag';
 import Cart from './Components/Cart/Cart.js'
 import Products from './Components/Products/Products.js'
 import Product from './Components/Products/Product.js'
+import LandingCarousel from './Components/Carousel/Carousel'
+import LandingCarouselSmall from './Components/Carousel/CarouselSmall'
+import Card from 'react-bootstrap/Card'
+import withSizes from 'react-sizes';
+import updateWindowSize from './Redux/actions/windowSizeAction.js'
+import SalesHeader from './Components/SalesHeader/SalesHeader.js'
+import SalesHeaderSmall from './Components/SalesHeader/SalesHeaderSmall.js'
+import SalesBody from './Components/SalesBody/SalesBody.js'
+
+
 
 
 
@@ -25,9 +36,26 @@ class App extends React.Component {
       isCartOpen: false,
       checkout: { lineItems: [] },
       products: [],
-      shop: {}
+      shop: {},
+      Categories: {
+        WShirts: 156354740276,
+        WPants: 156354510900,
+        WJackets: 156354445364,
+        MShirts: 156354707508,
+        MPants: 156354478132,
+        MJackets: 156354347060,
+      }
     };
-
+    this.result = [[{
+      Categories: {
+        WShirts: 156354740276,
+        WPants: 156354510900,
+        WJackets: 156354445364,
+        MShirts: 156354707508,
+        MPants: 156354478132,
+        MJackets: 156354347060,
+      }
+    }]]
     this.handleCartClose = this.handleCartClose.bind(this);
     this.addVariantToCart = this.addVariantToCart.bind(this);
     this.updateQuantityInCart = this.updateQuantityInCart.bind(this);
@@ -35,6 +63,16 @@ class App extends React.Component {
   }
 
   componentWillMount() {
+
+    this.props.updateWindowSize(window.innerWidth);
+
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        this.props.updateWindowSize(window.innerWidth);
+      }, 200)
+    );
+
     this.props.client.checkout.create().then((res) => {
       this.setState({
         checkout: res,
@@ -96,26 +134,67 @@ class App extends React.Component {
     });
   }
 
+  renderCarousel = () => {
+    if (this.props.windowSize > 1090) {
+      console.log('large screen')
+      return <LandingCarousel />;
+    } else {
+      console.log('small screen')
+      return <LandingCarouselSmall />
+    }
+  }
+
+  renderSalesHeader = () => {
+    if (this.props.windowSize > 1090) {
+      console.log('large screen')
+      return <SalesHeader />;
+    } else {
+      console.log('small screen')
+      return <SalesHeaderSmall />
+    }
+  }
   render() {
+    const bodyStyles = {
+      marginLeft: '1.75rem',
+      marginRight: '1.75rem',
+
+    }
+
+    const bottomSpacing = {
+      paddingBottom: '100px'
+    }
+
+    const appStyles = {
+      fontFamily: 'Ropa Sans',
+      letterSpacing: '1px'
+
+    }
+
     return (
-      <div className="App">
+      <div className="App" style={appStyles}>
         <Header client={this.props.client} />
-        <Products
-          products={this.state.products}
-          client={this.props.client}
-          addVariantToCart={this.addVariantToCart}
-        />
-        <Cart
-          client={this.props.client}
-          checkout={this.state.checkout}
-          isCartOpen={this.state.isCartOpen}
-          handleCartClose={this.handleCartClose}
-          updateQuantityInCart={this.updateQuantityInCart}
-          removeLineItemInCart={this.removeLineItemInCart}
-        />
+        <div style={bodyStyles}>
+          {this.renderSalesHeader()}
+          {this.renderCarousel()}
+          <SalesBody />
+          <h4>Women's Clothes</h4>
+
+          <Products
+            products={this.state.products}
+            client={this.props.client}
+            addVariantToCart={this.addVariantToCart}
+          />
+
+        </div>
+
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return { windowSize: state.windowSize };
+}
+
+
+export default connect(mapStateToProps, { updateWindowSize })(App);

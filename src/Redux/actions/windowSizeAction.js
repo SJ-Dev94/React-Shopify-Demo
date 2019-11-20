@@ -1,3 +1,5 @@
-export const updateWindowSize = width => dispatch => {
+const updateWindowSize = width => dispatch => {
   dispatch({ type: "UPDATING_WINDOW_SIZE", width });
 };
+
+export default updateWindowSize;

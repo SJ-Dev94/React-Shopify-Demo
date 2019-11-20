@@ -8,7 +8,7 @@ class Products extends Component {
 
     let products = this.props.products.map((product) => {
       return (
-        <Col>
+        <Col xs={4} lg={4} xl={4}>
           <Product
             addVariantToCart={this.props.addVariantToCart}
             client={this.props.client}
@@ -22,6 +22,7 @@ class Products extends Component {
     return (
       <div className="Product-wrapper">
         <Row>
+
           {products}
         </Row>
       </div>
