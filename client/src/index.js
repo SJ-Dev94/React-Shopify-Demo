@@ -9,6 +9,7 @@ import reducers from './Redux/reducers';
 import reduxThunk from 'redux-thunk';
 import App from './App.js';
 
+//app
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
